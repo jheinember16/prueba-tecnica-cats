@@ -1,0 +1,40 @@
+/* Estilos generales para todos los tamaños de pantalla */
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui;
+  max-width: 300px;
+  margin: auto auto;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+section img {
+  max-width: 320px;
+  height: auto;
+}
+
+/* Estilos para dispositivos móviles con un ancho máximo de 600px */
+@media (max-width: 600px) {
+  .box {
+    flex-direction: column; /* Puedes ajustar los estilos aquí según lo necesario */
+  }
+
+  section {
+    display: flex;
+    flex-direction: column; /* Cambiar a columnas para dispositivos móviles */
+    align-items: center;
+    gap: 1rem; /* Reducir el espacio entre elementos */
+  }
+
+  section img {
+    max-width: 100%; /* Hacer que las imágenes ocupen todo el ancho disponible */
+  }
+}
