@@ -11,13 +11,23 @@ export function App () {
   // para recuperar la cita al cargar la pagina
   useEffect(() => {
     fetch(CAT_ENDPOINT_RANDOM_FACT)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Error fetching fact')
+        return res.json()
+      })
       .then(data => {
         const { fact } = data
         setFact(fact)
       })
+      .catch((err) => {
+        // Manejar errores al intentar recuperar la cita.
+        // Aquí podrías mostrar un mensaje al usuario o realizar
+        // alguna otra acción para notificar del error.
+        console.error('Error fetching cat fact:', err)
+      })
   }, [])
 
+  // para recuperar la imagen cada vez que tenemos una cita nueva
   useEffect(() => {
     if (!fact) return
     const threeFirstWord = fact.split(' ').slice(0, 3).join(' ')
