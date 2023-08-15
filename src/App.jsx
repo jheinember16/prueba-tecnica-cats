@@ -1,53 +1,24 @@
-import React, { useEffect, useState } from 'react'
 import './App.css'
-
-const CAT_ENDPOINT_RANDOM_FACT = 'https://catfact.ninja/fact'
-const PREFIX__URL = 'https://cataas.com'
+import React from 'react'
+import { useCatFact } from './hooks/useCatFact.js'
+import { useCatImage } from './hooks/useCatImage.js'
 
 export function App () {
-  const [fact, setFact] = useState()
-  const [imageUrl, setImageUrl] = useState()
+  const { fact, refreshFact } = useCatFact()
+  const { imageUrl } = useCatImage({ fact })
 
-  // para recuperar la cita al cargar la pagina
-  useEffect(() => {
-    fetch(CAT_ENDPOINT_RANDOM_FACT)
-      .then(res => {
-        if (!res.ok) throw new Error('Error fetching fact')
-        return res.json()
-      })
-      .then(data => {
-        const { fact } = data
-        setFact(fact)
-      })
-      .catch((err) => {
-        // Manejar errores al intentar recuperar la cita.
-        // Aquí podrías mostrar un mensaje al usuario o realizar
-        // alguna otra acción para notificar del error.
-        console.error('Error fetching cat fact:', err)
-      })
-  }, [])
-
-  // para recuperar la imagen cada vez que tenemos una cita nueva
-  useEffect(() => {
-    if (!fact) return
-    const threeFirstWord = fact.split(' ').slice(0, 3).join(' ')
-    console.log(threeFirstWord)
-
-    fetch(`https://cataas.com/cat/says/${threeFirstWord}?size=50&color=red&json=true`)
-      .then(res => res.json())
-      .then(response => {
-        const { url } = response
-        setImageUrl(url)
-      })
-  }, [fact])
+  const handleClick = async () => {
+    refreshFact()
+  }
 
   return (
     <main>
       <h1>App de gatitos</h1>
-      <section>
-        {fact && <p>{fact}</p>}
-        {imageUrl && <img src={`${PREFIX__URL}${imageUrl}`} alt={`Image extracted using first three words for ${fact}`} />}
-      </section>
+      <button onClick={handleClick}>Get new fact</button>
+
+      {fact && <p>{fact}</p>}
+      {imageUrl && <img src={imageUrl} alt={`Image extracted using first three words for ${fact}`} />}
+
     </main>
   )
 }
